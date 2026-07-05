@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fatih Emin Karahan | CV'mi Sor</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="hero">
+      <div class="avatar">FEK</div>
+      <div class="hero-text">
+        <h1>Fatih Emin Karahan</h1>
+        <p>Yapay Zeka Mühendisi — Bilgisayarlı Görü / Doğal Dil İşleme</p>
+        <p class="sub">Bu sayfa, CV'sini tamamen tarayıcınızda çalışan bir yapay zeka (RAG) ile sorgulamanızı sağlar. Hiçbir veri bir sunucuya gönderilmez — model ve arama tamamen cihazınızda çalışır.</p>
+      </div>
+    </header>
+
+    <main class="chat-card">
+      <div id="status" class="status">Başlatılıyor...</div>
+      <div id="chat" class="chat"></div>
+      <form id="chat-form" class="input-row">
+        <input id="question" type="text" placeholder="Örn: Fatih hangi projelerde çalıştı?" disabled autocomplete="off" />
+        <button type="submit" disabled>Sor</button>
+      </form>
+      <div class="suggestions">
+        <button class="chip" data-q="Fatih hangi üniversitede okuyor?">Eğitimi nedir?</button>
+        <button class="chip" data-q="Fatih'in bilgisayarlı görü becerileri neler?">CV becerileri</button>
+        <button class="chip" data-q="Fatih'in yayınladığı makaleler neler?">Yayınları</button>
+        <button class="chip" data-q="Fatih'e nasıl ulaşabilirim?">İletişim</button>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>Kaynak: <a href="https://fatiheminkarahan.com" target="_blank" rel="noopener">fatiheminkarahan.com</a> · Model: Xenova/all-MiniLM-L6-v2 (tarayıcıda, transformers.js ile) · Deneme projesi</p>
+    </footer>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

@@ -109,6 +109,15 @@ body {
   border-bottom-left-radius: 4px;
 }
 
+.msg.bot a {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.msg.bot a:hover {
+  text-decoration: none;
+}
+
 .input-row {
   display: flex;
   gap: 8px;

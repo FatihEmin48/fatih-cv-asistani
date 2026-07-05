@@ -34,10 +34,53 @@ function setStatus(msg) {
   statusEl.textContent = msg;
 }
 
+const LINK_PATTERN =
+  /(https?:\/\/[^\s)]+|(?:www\.)?(?:linkedin\.com|github\.com|scholar\.google\.com|medium\.com|doi\.org)\/[^\s)]+|[\w.+-]+@[\w-]+\.[\w.-]+|\+\d[\d\s]{8,}\d)/g;
+
+function renderMessageContent(el, text) {
+  el.textContent = "";
+  let lastIndex = 0;
+  for (const match of text.matchAll(LINK_PATTERN)) {
+    const offset = match.index;
+    if (offset > lastIndex) {
+      el.appendChild(document.createTextNode(text.slice(lastIndex, offset)));
+    }
+    const raw = match[0];
+    const trimmed = raw.replace(/[.,;:)]+$/, "");
+    const trailing = raw.slice(trimmed.length);
+
+    const a = document.createElement("a");
+    a.textContent = trimmed;
+    a.target = "_blank";
+    a.rel = "noopener";
+    if (/^https?:\/\//.test(trimmed)) {
+      a.href = trimmed;
+    } else if (/^(www\.)?(linkedin\.com|github\.com|scholar\.google\.com|medium\.com|doi\.org)\//.test(trimmed)) {
+      a.href = `https://${trimmed}`;
+    } else if (/^[\w.+-]+@[\w-]+\.[\w.-]+$/.test(trimmed)) {
+      a.href = `mailto:${trimmed}`;
+    } else if (/^\+\d/.test(trimmed)) {
+      a.href = `tel:${trimmed.replace(/\s+/g, "")}`;
+    } else {
+      a.href = `https://${trimmed}`;
+    }
+    el.appendChild(a);
+    if (trailing) el.appendChild(document.createTextNode(trailing));
+    lastIndex = offset + raw.length;
+  }
+  if (lastIndex < text.length) {
+    el.appendChild(document.createTextNode(text.slice(lastIndex)));
+  }
+}
+
 function addMessage(role, text) {
   const div = document.createElement("div");
   div.className = `msg ${role}`;
-  div.textContent = text;
+  if (role === "bot") {
+    renderMessageContent(div, text);
+  } else {
+    div.textContent = text;
+  }
   chatEl.appendChild(div);
   chatEl.scrollTop = chatEl.scrollHeight;
   return div;
@@ -107,10 +150,10 @@ async function handleQuestion(question) {
   const pending = addMessage("bot", "Düşünüyorum...");
   try {
     const reply = await answer(question);
-    pending.textContent = reply;
+    renderMessageContent(pending, reply);
   } catch (err) {
     console.error(err);
-    pending.textContent = "Bir hata oluştu, tekrar dener misin?";
+    renderMessageContent(pending, "Bir hata oluştu, tekrar dener misin?");
   }
   chatEl.scrollTop = chatEl.scrollHeight;
 }
